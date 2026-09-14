@@ -53,3 +53,29 @@
 [ Spring Boot Controller & MyBatis ]
        ↓
 [ Oracle 21c Database (SOUND_DIARY) ]
+
+```
+```mermaid
+flowchart LR
+    User([사용자])
+    WeatherAPI([OpenWeatherMap API])
+    SpotifyAPI([Spotify Web API])
+
+    subgraph SoundDiary ["Sound Diary System"]
+        UC1(실시간 날씨/위치 조회)
+        UC2(스포티파이 음원 검색)
+        UC3(30초 미리듣기 재생)
+        UC4(일기 작성 및 저장)
+        UC5(일기 목록/상세 조회)
+        UC6(일기 삭제)
+    end
+
+    User --> UC1
+    User --> UC2
+    User --> UC3
+    User --> UC4
+    User --> UC5
+    User --> UC6
+
+    UC1 -.-> WeatherAPI
+    UC2 -.-> SpotifyAPI
