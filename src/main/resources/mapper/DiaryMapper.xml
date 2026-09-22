@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sj.sound_diary.mapper.DiaryMapper">
+
+	<!-- 일기 저장 -->
+	<!-- TRACK_NAME ~ SPOTIFY_TRACK_URI: 현재는 음원 미연동으로 항상 NULL, Spotify 붙으면 값 
+		채워짐 -->
+	<insert id="insertDiary" parameterType="DiaryDto">
+		INSERT INTO DIARY (
+		MEMBER_ID, TITLE, CONTENT,
+		LATITUDE, LONGITUDE, LOCATION_NAME,
+		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
+		TRACK_NAME, ARTIST_NAME,
+		ALBUM_IMAGE_URL, SPOTIFY_TRACK_URI,
+		IS_PUBLIC
+		) VALUES (
+		#{memberId},
+		#{title, jdbcType=VARCHAR},
+		#{content, jdbcType=CLOB},
+		#{latitude,
+		jdbcType=NUMERIC},
+		#{longitude, jdbcType=NUMERIC},
+		#{locationName,
+		jdbcType=VARCHAR},
+		#{weatherIcon, jdbcType=VARCHAR},
+		#{weatherDesc,
+		jdbcType=VARCHAR},
+		#{weatherTemp, jdbcType=NUMERIC},
+		#{trackName,
+		jdbcType=VARCHAR},
+		#{artistName, jdbcType=VARCHAR},
+		#{albumImageUrl,
+		jdbcType=VARCHAR},
+		#{spotifyTrackUri, jdbcType=VARCHAR},
+		#{isPublic,
+		jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 내 일기 목록 (카드 그리드용 요약 정보만, LATITUDE/LONGITUDE/SPOTIFY_TRACK_URI는 목록에 
+		불필요해서 제외) -->
+	<select id="selectDiaryList" parameterType="long"
+		resultType="DiaryDto">
+		SELECT
+		DIARY_ID, MEMBER_ID, TITLE, CONTENT,
+		LOCATION_NAME,
+		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
+		TRACK_NAME, ARTIST_NAME,
+		ALBUM_IMAGE_URL,
+		IS_PUBLIC, CREATED_AT
+		FROM DIARY
+		WHERE MEMBER_ID =
+		#{memberId}
+		ORDER BY CREATED_AT DESC
+	</select>
+
+	<!-- 일기 상세 (음원 메타데이터 전부 포함) -->
+	<select id="selectDiaryById" parameterType="long"
+		resultType="DiaryDto">
+		SELECT
+		DIARY_ID, MEMBER_ID, TITLE, CONTENT,
+		LATITUDE,
+		LONGITUDE, LOCATION_NAME,
+		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
+		TRACK_NAME, ARTIST_NAME, ALBUM_IMAGE_URL, SPOTIFY_TRACK_URI,
+		IS_PUBLIC
+		FROM DIARY
+		WHERE DIARY_ID = #{diaryId}
+	</select>
+
+	<!-- 일기 수정: 지금은 텍스트/공개여부만, 추후 음원 재선택 수정 기능 붙이면 여기에 컬럼 추가 -->
+	<update id="updateDiary" parameterType="DiaryDto">
+		UPDATE DIARY
+		SET TITLE =
+		#{title, jdbcType=VARCHAR},
+		CONTENT = #{content, jdbcType=CLOB},
+		IS_PUBLIC = #{isPublic, jdbcType=VARCHAR},
+		UPDATED_AT = SYSDATE
+		WHERE
+		DIARY_ID = #{diaryId}
+	</update>
+
+	<delete id="deleteDiary" parameterType="long">
+		DELETE FROM DIARY WHERE
+		DIARY_ID = #{diaryId}
+	</delete>
+	<!-- 페이징된 일기 목록: offset부터 limit개 -->
+	<select id="selectDiaryListPaged" resultType="DiaryDto">
+		SELECT
+		DIARY_ID,
+		MEMBER_ID, TITLE, CONTENT,
+		LOCATION_NAME, WEATHER_ICON, WEATHER_DESC,
+		WEATHER_TEMP,
+		TRACK_NAME, ARTIST_NAME, ALBUM_IMAGE_URL,
+		IS_PUBLIC,
+		CREATED_AT
+		FROM DIARY
+		WHERE MEMBER_ID = #{memberId}
+		ORDER BY CREATED_AT
+		DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+
+	<!-- 감성 광장용 페이징 목록: 공개(IS_PUBLIC='Y') 일기만, 작성자 정보 JOIN -->
+	<select id="selectPublicDiaryListPaged" resultType="DiaryDto">
+		SELECT
+		D.DIARY_ID, D.MEMBER_ID, D.TITLE, D.CONTENT,
+		D.LOCATION_NAME,
+		D.WEATHER_ICON, D.WEATHER_DESC, D.WEATHER_TEMP,
+		D.TRACK_NAME,
+		D.ARTIST_NAME, D.ALBUM_IMAGE_URL,
+		D.IS_PUBLIC, D.CREATED_AT,
+		M.NICKNAME
+		AS authorNickname,
+		M.PROFILE_IMG_URL AS authorProfileImgUrl
+		FROM DIARY D
+		JOIN MEMBER M ON D.MEMBER_ID =
+		M.MEMBER_ID
+		WHERE D.IS_PUBLIC = 'Y'
+		ORDER
+		BY D.CREATED_AT DESC
+		OFFSET
+		#{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+
+	<!-- 내 일기 전체 개수 -->
+	<select id="countDiaryByMemberId" parameterType="long"
+		resultType="int">
+		SELECT COUNT(*) FROM DIARY WHERE MEMBER_ID = #{memberId}
+	</select>
+
+	<!-- 감성 광장 공개 게시물 전체 개수 -->
+	<select id="countPublicDiary" resultType="int">
+		SELECT COUNT(*) FROM
+		DIARY WHERE IS_PUBLIC = 'Y'
+	</select>
+
+	<!-- 오늘의 인기곡 Top 5 (곡+아티스트+앨범이미지+재생URI) -->
+	<select id="selectTopTracks" resultType="map">
+		SELECT
+		TRACK_NAME AS trackName,
+		ARTIST_NAME AS artistName,
+		MAX(ALBUM_IMAGE_URL) AS albumImageUrl,
+		MAX(SPOTIFY_TRACK_URI) AS spotifyTrackUri,
+		COUNT(*) AS cnt
+		FROM DIARY
+		WHERE IS_PUBLIC = 'Y'
+		AND TRACK_NAME IS NOT NULL
+		AND TRUNC(CREATED_AT) = TRUNC(SYSDATE)
+		GROUP BY TRACK_NAME, ARTIST_NAME
+		ORDER BY cnt DESC
+		FETCH FIRST 5 ROWS ONLY
+	</select>
+</mapper>

@@ -1,0 +1,72 @@
+/* ===== diary-list 전용 (일기 목록 카드) ===== */
+
+.sd-subtitle {
+  color: #9aa2b1;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.sd-empty {
+  color: #6b7280;
+  text-align: center;
+  padding: 60px 0;
+}
+
+.sd-diary-card {
+  background: #171a21;
+  border: 1px solid #262b35;
+  color: #e8e8ea;
+  border-radius: 10px;
+}
+
+.sd-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sd-card-date {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.sd-card-content {
+  color: #c7cdd8;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+
+.sd-track-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0f1115;
+  border: 1px solid #262b35;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+.sd-track-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.sd-track-name { font-size: 13px; font-weight: 600; }
+.sd-track-artist { font-size: 12px; color: #9aa2b1; }
+
+.sd-btn-outline {
+  border: 1px solid #2c313c;
+  color: #c7cdd8;
+  background: transparent;
+}
+.sd-btn-outline:hover { border-color: #22d3ee; color: #22d3ee; }
+
+.sd-btn-danger {
+  border: 1px solid #4a2020;
+  color: #f87171;
+  background: transparent;
+}
+.sd-btn-danger:hover { background: #2a1414; }

@@ -1,0 +1,535 @@
+body.sd-body {
+	background: #0f1115;
+	color: #e8e8ea;
+	font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+	min-height: 100vh;
+}
+
+.sd-navbar {
+	background: #14161c;
+	border-bottom: 1px solid #262b35;
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+.sd-brand {
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 20px;
+	text-decoration: none;
+}
+
+.sd-badge {
+	background: #1c2028;
+	border: 1px solid #2c313c;
+	color: #c7cdd8;
+	font-weight: 500;
+	padding: 7px 12px;
+}
+
+.sd-badge-accent {
+	border-color: #22d3ee;
+	color: #22d3ee;
+}
+
+.sd-nav-link {
+	color: #9aa2b1;
+	font-weight: 500;
+}
+
+.sd-nav-link.active, .sd-nav-link:hover {
+	color: #22d3ee;
+}
+
+.sd-main {
+	padding: 56px 20px 80px;
+}
+
+.sd-card {
+	max-width: 620px;
+	background: #171a21;
+	border: 1px solid #262b35;
+	border-radius: 12px;
+	padding: 40px;
+}
+
+.sd-title {
+	font-weight: 700;
+	margin-bottom: 28px;
+}
+
+.sd-label {
+	color: #9aa2b1;
+	font-size: 14px;
+	margin-bottom: 8px;
+}
+
+.sd-input {
+	background: #0f1115;
+	border: 1px solid #2c313c;
+	color: #e8e8ea;
+}
+
+.sd-input:focus {
+	background: #0f1115;
+	color: #e8e8ea;
+	border-color: #22d3ee;
+	box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+.sd-input::placeholder {
+	color: #5a6172;
+}
+
+.sd-weather-btn {
+	flex: 1;
+	background: #0f1115;
+	border: 1px solid #2c313c;
+	color: #c7cdd8;
+}
+
+.sd-weather-btn.active {
+	border-color: #22d3ee;
+	color: #22d3ee;
+	background: rgba(34, 211, 238, 0.08);
+}
+
+.sd-switch .form-check-input {
+	background-color: #2c313c;
+	border-color: #2c313c;
+}
+
+.sd-switch .form-check-input:checked {
+	background-color: #22d3ee;
+	border-color: #22d3ee;
+}
+
+.sd-save-btn {
+	background: #2563eb;
+	color: #fff;
+	font-weight: 600;
+	padding: 12px;
+	border: none;
+}
+
+.sd-save-btn:hover {
+	background: #1d4ed8;
+	color: #fff;
+}
+
+.sd-save-btn:disabled {
+	background: #3a3f4a;
+}
+
+.sd-status {
+	font-size: 13px;
+	margin-top: 12px;
+	min-height: 18px;
+}
+
+.sd-status.error {
+	color: #f87171;
+}
+
+.sd-status.success {
+	color: #4ade80;
+}
+
+/* ===== 날씨 필터 버튼 ===== */
+.sd-filter-group {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.sd-filter-btn {
+	background: #171a21;
+	border: 1px solid #2c313c;
+	color: #c7cdd8;
+	font-size: 13px;
+	padding: 6px 16px;
+	border-radius: 999px;
+}
+
+.sd-filter-btn:hover {
+	border-color: #22d3ee;
+	color: #22d3ee;
+}
+
+.sd-filter-btn.active {
+	background: rgba(34, 211, 238, 0.12);
+	border-color: #22d3ee;
+	color: #22d3ee;
+	font-weight: 600;
+}
+
+.sd-logout-link {
+	color: #f87171 !important;
+	font-size: 13px;
+}
+
+.sd-logout-link:hover {
+	color: #fca5a5 !important;
+}
+
+/* ===== 검색 패널 ===== */
+#검색패널 투명
+.sd-search-panel {
+	background: rgba(23, 26, 33, 0.55);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
+	padding: 24px;
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+}
+.sd-search-btn {
+	background: #22d3ee;
+	color: #0f1115;
+	font-weight: 600;
+	border: none;
+}
+
+.sd-track-results {
+	max-height: 480px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sd-track-result-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.sd-track-result-item:hover {
+	background: #1f2430;
+}
+
+.sd-selected-track {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: #0f1115;
+	border: 1px solid #262b35;
+	border-radius: 8px;
+	padding: 10px;
+}
+/* 이미지 크기 수정 */
+.sd-track-thumb {
+	width: 36px;
+	height: 36px;
+	border-radius: 4px;
+	object-fit: cover;
+	flex-shrink: 0; /* 추가: 부모가 좁아져도 이미지가 안 찌그러지게 */
+}
+
+.sd-selected-track img {
+	width: 48px;
+	height: 48px;
+	border-radius: 6px;
+	object-fit: cover;
+	flex-shrink: 0;
+}
+/* ===== 하단 재생바 ===== */
+.sd-player-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #14161c;
+	border-top: 1px solid #262b35;
+	display: flex;
+	align-items: center;
+	justify-content: center; /* 추가: 전체 컨텐츠 가운데 정렬 */
+	gap: 20px; /* 12px → 20px, 여유있게 */
+	padding: 10px 20px;
+	z-index: 1000;
+}
+
+.sd-player-info {
+	flex: none; /* 기존 flex: 1 제거 — 더 이상 늘어나지 않게 */
+	text-align: center;
+	max-width: 240px;
+}
+
+.sd-player-cover {
+	width: 40px;
+	height: 40px;
+	border-radius: 6px;
+	object-fit: cover;
+}
+
+.sd-player-info {
+	flex: 1;
+}
+
+.sd-player-track {
+	font-size: 13px;
+	font-weight: 600;
+	color: #e8e8ea;
+}
+
+.sd-player-artist {
+	font-size: 12px;
+	color: #9aa2b1;
+}
+
+.sd-player-toggle {
+	background: transparent;
+	border: none;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.15s ease;
+}
+
+.sd-player-toggle img {
+	width: 100%;
+	height: 100%;
+}
+
+.sd-player-toggle:hover:not(:disabled) {
+	transform: scale(1.12);
+}
+
+.sd-player-toggle:active:not(:disabled) {
+	transform: scale(0.95);
+}
+
+.sd-player-toggle:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+body.sd-body main.sd-main {
+	padding-bottom: 100px;
+} /* 재생바에 가려지지 않도록 여백 */
+
+/* ===== community-list 좌측 통계 패널 (자리만) ===== */
+.sd-stats-panel {
+	min-height: 300px;
+}
+
+/* ===== 작성자 표시 (커뮤니티 카드용) ===== */
+.sd-author-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.sd-author-avatar {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.sd-author-name {
+	font-size: 12px;
+	color: #9aa2b1;
+	font-weight: 600;
+}
+
+/* 노래 재생바 스타일 */
+.sd-player-info {
+	flex: 1;
+	max-width: 360px;
+}
+
+.sd-player-progress-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 4px;
+}
+
+.sd-player-time {
+	font-size: 11px;
+	color: #6b7280;
+	min-width: 32px;
+	text-align: center;
+}
+
+.sd-player-progress {
+	flex: 1;
+	height: 4px;
+	accent-color: #22d3ee;
+	cursor: pointer;
+}
+
+.sd-player-next {
+	background: transparent;
+	border: none;
+	color: #c7cdd8;
+	font-size: 18px;
+}
+
+.sd-player-next:hover {
+	color: #22d3ee;
+}
+
+.sd-player-next:disabled {
+	color: #3a3f4a;
+}
+
+#광장 랭킹 스타일
+.sd-ranking-filter-btn {
+	flex: 1;
+	background: #0f1115;
+	border: 1px solid #2c313c;
+	color: #c7cdd8;
+	font-size: 12px;
+	padding: 5px 0;
+}
+
+.sd-ranking-filter-btn.active {
+	border-color: #22d3ee;
+	color: #22d3ee;
+}
+
+.sd-ranking-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 0;
+	border-bottom: 1px solid #262b35;
+}
+
+.sd-ranking-rank {
+	width: 20px;
+	font-weight: 700;
+	color: #22d3ee;
+	font-size: 14px;
+}
+
+.sd-ranking-name {
+	flex: 1;
+	font-size: 13px;
+	color: #e8e8ea;
+}
+
+.sd-ranking-count {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.sd-sticky-panel,
+.sd-stats-panel {
+	min-height: 300px;
+	position: sticky;
+	top: 20px; /* 화면 상단에서 20px 떨어진 위치에 고정 */
+	max-height: calc(100vh - 40px);
+	overflow-y: auto; /* 랭킹 목록이 길어지면 패널 안에서만 스크롤 */
+}
+
+.sd-ranking-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 0;
+	border-bottom: 1px solid #262b35;
+}
+
+.sd-ranking-clickable {
+	cursor: pointer;
+	transition: background 0.15s;
+	border-radius: 6px;
+	padding: 8px;
+}
+
+.sd-ranking-clickable:hover {
+	background: #1f2430;
+}
+
+.sd-ranking-rank {
+	width: 18px;
+	font-weight: 700;
+	color: #22d3ee;
+	font-size: 14px;
+	flex-shrink: 0;
+}
+
+.sd-ranking-cover {
+	width: 36px;
+	height: 36px;
+	border-radius: 4px;
+	object-fit: cover;
+	flex-shrink: 0;
+}
+
+.sd-ranking-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.sd-ranking-track {
+	font-size: 13px;
+	font-weight: 600;
+	color: #e8e8ea;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.sd-ranking-artist {
+	font-size: 11px;
+	color: #9aa2b1;
+}
+
+.sd-ranking-count {
+	font-size: 11px;
+	color: #6b7280;
+	flex-shrink: 0;
+}
+.sd-logo-icon {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;   /* 이 줄 추가 — 비율 유지하면서 크기에 맞춤 */
+  vertical-align: middle;
+  margin-right: 2px;
+  border-radius: 2px;
+}
+#버튼 스타일
+.sd-btn-outline {
+	border: 1px solid #3a4150;
+	color: #e8e8ea;
+	background: #1c2028;
+}
+.sd-btn-outline:hover {
+	border-color: #22d3ee;
+	color: #22d3ee;
+	background: #20242e;
+}
+
+.sd-btn-danger {
+	border: 1px solid #7f1d1d;
+	color: #fca5a5;
+	background: rgba(248, 113, 113, 0.1);
+}
+.sd-btn-danger:hover {
+	background: rgba(248, 113, 113, 0.2);
+	border-color: #f87171;
+}
+#다이어리 카드 
+.sd-diary-card {
+	background: #171a21;
+	border: 1px solid #262b35;
+	color: #e8e8ea;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+	transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.sd-diary-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+	border-color: #3a4150;
+}
+

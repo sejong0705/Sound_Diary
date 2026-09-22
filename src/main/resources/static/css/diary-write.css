@@ -1,0 +1,4 @@
+/* Chrome/Edge의 달력 아이콘도 어두운 배경용이라 흰 배경에선 안 보임 → 색 반전 */
+#diaryDate::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

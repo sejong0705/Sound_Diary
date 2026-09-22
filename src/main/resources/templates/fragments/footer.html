@@ -1,0 +1,29 @@
+<footer th:fragment="footer" class="sd-footer">
+	<div class="sd-player-bar" id="playerBar">
+		<img id="playerCover" src="" alt="" class="sd-player-cover d-none">
+
+		<div class="sd-player-info">
+			<div id="playerTrackName" class="sd-player-track">재생 중인 곡 없음</div>
+			<div id="playerArtistName" class="sd-player-artist"></div>
+
+			<!-- 진행바 + 시간 표시 -->
+			<div class="sd-player-progress-row">
+				<span id="playerCurrentTime" class="sd-player-time">0:00</span> <input
+					type="range" id="playerProgressBar" class="sd-player-progress"
+					min="0" max="1000" value="0"> <span id="playerDuration"
+					class="sd-player-time">0:00</span>
+			</div>
+		</div>
+
+		<button type="button" id="playerToggleBtn" class="sd-player-toggle"
+			disabled>
+			<img id="playerToggleIcon" th:src="@{/images/play-circle.svg}"
+				alt="재생">
+		</button>
+		<button type="button" id="playerNextBtn" class="sd-player-next"
+			disabled title="다음 곡">⏭</button>
+	</div>
+
+	<script src="https://sdk.scdn.co/spotify-player.js"></script>
+	<script th:src="@{/js/player.js}"></script>
+</footer>
