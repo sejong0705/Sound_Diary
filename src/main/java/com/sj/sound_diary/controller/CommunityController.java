@@ -46,6 +46,7 @@ public class CommunityController {
 
         model.addAttribute("diary", diary);
         model.addAttribute("isOwner", diary.getMemberId().equals(currentMemberId));
+        model.addAttribute("backUrl", "/community/list");
         return "diary-detail";
     }
     //총계 계산

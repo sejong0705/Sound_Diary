@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingIndicator = document.getElementById('loadingIndicator');
   const noMoreIndicator = document.getElementById('noMoreIndicator');
 
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 12;
   let offset = 0;
   let totalCount = 0;
   let isLoading = false;
@@ -23,12 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'cloudy';
   }
 
-  function weatherBadgeText(wcat) {
-    if (wcat === 'sunny') return '☀️ 맑음';
-    if (wcat === 'rainy') return '🌧️ 비';
-    if (wcat === 'snowy') return '❄️ 눈';
-    if (wcat === 'cloudy') return '☁️ 흐림';
-    return '날씨 없음';
+  function weatherIconImg(icon) {
+    if (!icon) return '';
+    return `<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="" class="sd-weather-icon-img">`;
   }
 
   function formatDate(value) {
@@ -58,16 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>`
       : '';
 
+    // 프로필 이미지가 없으면 기본 이미지로 대체
+    const profileImg = diary.authorProfileImgUrl && diary.authorProfileImgUrl.trim() !== ''
+      ? diary.authorProfileImgUrl
+      : '/images/default-profile.png';
+
     col.innerHTML = `
       <div class="card sd-diary-card h-100">
         <div class="card-body d-flex flex-column">
           <div class="sd-author-row mb-2">
-            <img src="${diary.authorProfileImgUrl ?? ''}" alt="" class="sd-author-avatar" onerror="this.style.display='none'">
+            <img src="${profileImg}" alt="" class="sd-author-avatar"
+                 onerror="this.src='/images/default-profile.png'">
             <span class="sd-author-name">${diary.authorNickname ?? '익명'}</span>
           </div>
           <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="sd-card-title">${diary.title ?? '제목 없음'}</h5>
-            <span class="badge sd-badge">${weatherBadgeText(wcat)}</span>
+            <span class="badge sd-badge sd-weather-badge-img">${weatherIconImg(diary.weatherIcon)}</span>
           </div>
           <div class="sd-card-date">${formatDate(diary.createdAt)}</div>
           ${trackBlock}

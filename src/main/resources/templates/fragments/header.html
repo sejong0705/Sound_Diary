@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<header th:fragment="header" class="sd-header">
-  <nav class="navbar navbar-expand-lg sd-navbar px-4">
-    <a class="navbar-brand sd-brand" href="/diary/list" target="mainFrame">
-  <img th:src="@{/images/logo.png}" alt="Sound Diary" class="sd-logo-icon">
-  Sound Diary
-</a>
+	<header th:fragment="header" class="sd-header">
+		<nav class="navbar navbar-expand-lg sd-navbar px-4">
+			<a class="navbar-brand sd-brand" href="/diary/list"
+				target="mainFrame"> <img th:src="@{/images/logo.png}"
+				alt="Sound Diary" class="sd-logo-icon"> Sound Diary
+			</a>
 
-    <div class="d-flex align-items-center gap-2">
-      <span class="badge sd-badge" id="locationBadge">📍 위치 확인 중</span>
-      <span class="badge sd-badge sd-badge-accent" id="weatherBadge">날씨 불러오는 중</span>
-    </div>
+			<div class="d-flex align-items-center gap-2">
+				<span class="badge sd-badge sd-location-badge" id="locationBadge">
+					<img th:src="@{/images/pin-icon.png}" alt="" class="sd-pin-icon">
+					<span id="locationText">위치 확인 중</span>
+				</span> <span class="badge sd-badge sd-badge-accent" id="weatherBadge">날씨
+					불러오는 중</span>
+			</div>
 
-    <ul class="navbar-nav ms-auto flex-row gap-4">
-      <li class="nav-item"><a class="nav-link sd-nav-link" href="/diary/write" target="mainFrame">글쓰기</a></li>
-      <li class="nav-item"><a class="nav-link sd-nav-link" href="/diary/list" target="mainFrame">내 일기장</a></li>
-      <li class="nav-item"><a class="nav-link sd-nav-link" href="/community/list" target="mainFrame">감성 광장</a></li>
-      <li class="nav-item"><a class="nav-link sd-nav-link sd-logout-link" href="/api/auth/logout">로그아웃</a></li>
-    </ul>
-  </nav>
+			<ul class="navbar-nav ms-auto flex-row gap-4">
+				<li class="nav-item"><a class="nav-link sd-nav-link"
+					href="/diary/write" target="mainFrame">글쓰기</a></li>
+				<li class="nav-item"><a class="nav-link sd-nav-link"
+					href="/diary/list" target="mainFrame">내 일기장</a></li>
+				<li class="nav-item"><a class="nav-link sd-nav-link"
+					href="/community/list" target="mainFrame">감성 광장</a></li>
+				<li class="nav-item"><a
+					class="nav-link sd-nav-link sd-logout-link" href="/api/auth/logout">로그아웃</a></li>
+			</ul>
+		</nav>
 
-  <!-- 공통 로직(weather-common.js) 먼저, 그다음 이 헤더 전용 렌더러 -->
-  <script th:src="@{/js/weather-common.js}"></script>
-  <script th:src="@{/js/header.js}"></script>
-</header>
+		<!-- 공통 로직(weather-common.js) 먼저, 그다음 이 헤더 전용 렌더러 -->
+		<script th:src="@{/js/weather-common.js}"></script>
+		<script th:src="@{/js/header.js}"></script>
+	</header>
 </body>
 </html>

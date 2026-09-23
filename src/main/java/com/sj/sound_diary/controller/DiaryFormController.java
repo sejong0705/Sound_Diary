@@ -44,6 +44,7 @@ public class DiaryFormController {
     public String detailPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("diary", diaryService.getDiaryDetail(id));
         model.addAttribute("isOwner", true);  // 나중에 감성 광장에서 재사용 시 false로 넘기면 수정/삭제 버튼 숨겨짐
+        model.addAttribute("backUrl", "/diary/list");
         return "diary-detail";
     }
 

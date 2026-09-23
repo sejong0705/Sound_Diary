@@ -72,3 +72,16 @@
   background: rgba(15, 17, 21, 0.35);
   z-index: -1;
 }
+
+.sd-detail-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sd-detail-weather-icon {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+  object-fit: contain;
+}

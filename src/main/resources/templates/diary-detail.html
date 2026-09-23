@@ -45,17 +45,22 @@
 
 					<div class="d-flex justify-content-between align-items-start mb-3">
 						<h2 class="sd-title mb-0">일기 상세</h2>
-						<span class="badge sd-badge"
-							th:text="${wcat == 'sunny' ? '☀️ 맑음' :
-                          (wcat == 'rainy' ? '🌧️ 비' :
-                          (wcat == 'snowy' ? '❄️ 눈' :
-                          (wcat == 'cloudy' ? '☁️ 흐림' : '날씨 없음')))}">날씨</span>
+						<span class="badge sd-badge sd-weather-badge-img"
+							th:if="${diary.weatherIcon != null}"> <img
+							th:src="'https://openweathermap.org/img/wn/' + ${diary.weatherIcon} + '@2x.png'"
+							alt="" class="sd-detail-weather-icon"> <span
+							th:text="${diary.weatherDesc}">날씨</span>
+						</span>
+						 <span class="badge sd-badge"
+							th:unless="${diary.weatherIcon != null}">날씨 없음</span>
 					</div>
 
 					<div class="sd-detail-meta mb-4">
 						<span th:if="${diary.locationName != null}"
-							th:text="'📍 ' + ${diary.locationName}">위치</span> <span
-							th:if="${diary.weatherTemp != null}"
+							class="sd-detail-location"> <img
+							th:src="@{/images/pin-icon.png}" alt="" class="sd-pin-icon">
+							<span th:text="${diary.locationName}">위치</span>
+						</span> <span th:if="${diary.weatherTemp != null}"
 							th:text="${#numbers.formatDecimal(diary.weatherTemp, 1, 1) + '°C'}">기온</span>
 						<span
 							th:text="${#temporals.format(diary.createdAt, 'yyyy.MM.dd')}">날짜</span>
@@ -95,17 +100,16 @@
 						<!-- 보기 모드 버튼 -->
 						<button type="button" class="btn sd-save-btn flex-grow-1"
 							id="editModeBtn">수정하기</button>
-						<button type="button" class="btn sd-btn-danger" id="deleteBtn"
-							th:attr="data-id=${diary.diaryId}">삭제</button>
-
 						<!-- 수정 모드 버튼 (기본 숨김) -->
 						<button type="submit" class="btn sd-save-btn flex-grow-1 d-none"
 							id="saveBtn">수정 저장</button>
+						<button type="button" class="btn sd-btn-danger" id="deleteBtn"
+							th:attr="data-id=${diary.diaryId}">삭제</button>
 						<button type="button" class="btn sd-btn-outline d-none"
 							id="cancelEditBtn">취소</button>
 					</div>
 
-					<a href="/diary/list" class="btn sd-btn-outline w-100 mt-2">목록으로</a>
+					<a th:href="${backUrl}" class="btn sd-btn-outline w-100 mt-2">목록으로</a>
 				</form>
 			</div>
 		</div>

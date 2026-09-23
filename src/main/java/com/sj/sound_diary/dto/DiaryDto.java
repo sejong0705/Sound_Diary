@@ -39,4 +39,8 @@ public class DiaryDto {
     
     //목푝 화면 날짜 표시용
     private LocalDateTime createdAt;
+    
+    //공개 게시글 프로필 
+    private String authorNickname;
+    private String authorProfileImgUrl;
 }

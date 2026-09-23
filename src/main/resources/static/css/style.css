@@ -19,6 +19,13 @@ body.sd-body {
 	text-decoration: none;
 }
 
+.sd-brand:visited {
+	color: #ffffff;
+}
+
+.sd-brand:hover {
+	color: #ffffff;
+}
 .sd-badge {
 	background: #1c2028;
 	border: 1px solid #2c313c;
@@ -37,7 +44,13 @@ body.sd-body {
 	font-weight: 500;
 }
 
-.sd-nav-link.active, .sd-nav-link:hover {
+.sd-nav-link:visited {
+	color: #9aa2b1;
+}
+
+.sd-nav-link.active,
+.sd-nav-link:hover,
+.sd-nav-link:visited:hover {
 	color: #22d3ee;
 }
 
@@ -122,9 +135,10 @@ body.sd-body {
 }
 
 .sd-status {
-	font-size: 13px;
+	font-size: 16px;
 	margin-top: 12px;
 	min-height: 18px;
+	color: #c7cdd8;
 }
 
 .sd-status.error {
@@ -147,8 +161,13 @@ body.sd-body {
 	border: 1px solid #2c313c;
 	color: #c7cdd8;
 	font-size: 13px;
-	padding: 6px 16px;
-	border-radius: 999px;
+	padding: 0px 14px;
+	border-radius: 8px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	line-height: 1.2;
 }
 
 .sd-filter-btn:hover {
@@ -162,7 +181,13 @@ body.sd-body {
 	color: #22d3ee;
 	font-weight: 600;
 }
-
+/* 목록/광장의 날씨 필터 버튼f.sd-weather-icon-img */
+.sd-filter-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 .sd-logout-link {
 	color: #f87171 !important;
 	font-size: 13px;
@@ -173,14 +198,13 @@ body.sd-body {
 }
 
 /* ===== 검색 패널 ===== */
-#검색패널 투명
 .sd-search-panel {
-	background: rgba(23, 26, 33, 0.55);
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(23, 26, 33, 0.35);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 10px;
 	padding: 24px;
-	backdrop-filter: blur(14px);
-	-webkit-backdrop-filter: blur(14px);
+	backdrop-filter: blur(16px) saturate(1.4);
+	-webkit-backdrop-filter: blur(16px) saturate(1.4);
 }
 .sd-search-btn {
 	background: #22d3ee;
@@ -241,12 +265,14 @@ body.sd-body {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background: #14161c;
-	border-top: 1px solid #262b35;
+	background: rgba(20, 22, 28, 0.5);
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
 	display: flex;
 	align-items: center;
-	justify-content: center; /* 추가: 전체 컨텐츠 가운데 정렬 */
-	gap: 20px; /* 12px → 20px, 여유있게 */
+	justify-content: center;
+	gap: 20px;
 	padding: 10px 20px;
 	z-index: 1000;
 }
@@ -309,8 +335,12 @@ body.sd-body {
 	cursor: default;
 }
 
-body.sd-body main.sd-main {
-	padding-bottom: 100px;
+body.sd-body {
+	background: radial-gradient(circle at 20% 10%, #1a2035 0%, #0f1115 45%),
+	            radial-gradient(circle at 80% 90%, #1a1530 0%, #0f1115 50%);
+	color: #e8e8ea;
+	font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+	min-height: 100vh;
 } /* 재생바에 가려지지 않도록 여백 */
 
 /* ===== community-list 좌측 통계 패널 (자리만) ===== */
@@ -380,7 +410,8 @@ body.sd-body main.sd-main {
 	color: #3a3f4a;
 }
 
-#광장 랭킹 스타일
+/* 광장 랭킹 스타일 */
+
 .sd-ranking-filter-btn {
 	flex: 1;
 	background: #0f1115;
@@ -489,15 +520,16 @@ body.sd-body main.sd-main {
 	color: #6b7280;
 	flex-shrink: 0;
 }
+/* 	헤더 로고 */
 .sd-logo-icon {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;   /* 이 줄 추가 — 비율 유지하면서 크기에 맞춤 */
   vertical-align: middle;
   margin-right: 2px;
   border-radius: 2px;
 }
-#버튼 스타일
+/* 버튼 스타일 */
 .sd-btn-outline {
 	border: 1px solid #3a4150;
 	color: #e8e8ea;
@@ -518,7 +550,7 @@ body.sd-body main.sd-main {
 	background: rgba(248, 113, 113, 0.2);
 	border-color: #f87171;
 }
-#다이어리 카드 
+/* 다이어리 카드  */
 .sd-diary-card {
 	background: #171a21;
 	border: 1px solid #262b35;
@@ -532,4 +564,85 @@ body.sd-body main.sd-main {
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 	border-color: #3a4150;
 }
+.sd-location-badge {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+}
+/* 	위치 핀 아이콘 */
+.sd-pin-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+/* 	일기 카드, 헤더의 날씨 표시 뱃지 */
+.sd-weather-icon-img {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  object-fit: contain;
+}
 
+.sd-weather-badge-img {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+/* 작성 화면(diary-write.html)의 날씨 선택 버튼 */
+.sd-weather-btn img {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.sd-track-results {
+	max-height: 480px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+/* 스크롤바 커스텀 (Chrome, Edge, Safari 계열) */
+.sd-track-results::-webkit-scrollbar {
+	width: 4px;
+}
+.sd-track-results::-webkit-scrollbar-track {
+	background: transparent;
+}
+.sd-track-results::-webkit-scrollbar-thumb {
+	background: #3a4150;
+	border-radius: 999px;
+}
+.sd-track-results::-webkit-scrollbar-thumb:hover {
+	background: #4a5266;
+}
+
+/* Firefox */
+.sd-track-results {
+	scrollbar-width: thin;
+	scrollbar-color: #3a4150 transparent;
+}
+
+.sd-input:-webkit-autofill,
+.sd-input:-webkit-autofill:hover,
+.sd-input:-webkit-autofill:focus {
+	-webkit-text-fill-color: #e8e8ea;
+	-webkit-box-shadow: 0 0 0 1000px #0f1115 inset;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+.sd-author-avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	object-fit: cover;
+}
