@@ -646,3 +646,21 @@ body.sd-body {
 	border-radius: 50%;
 	object-fit: cover;
 }
+/* 페이지 전체 스크롤바 (Chrome, Edge, Safari 계열) */
+html {
+	scrollbar-width: thin;
+	scrollbar-color: #3a4150 transparent;
+}
+html::-webkit-scrollbar {
+	width: 8px;
+}
+html::-webkit-scrollbar-track {
+	background: transparent;
+}
+html::-webkit-scrollbar-thumb {
+	background: #3a4150;
+	border-radius: 999px;
+}
+html::-webkit-scrollbar-thumb:hover {
+	background: #4a5266;
+}
