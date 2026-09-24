@@ -12,9 +12,7 @@ import com.sj.sound_diary.dto.DiaryDto;
 public interface DiaryMapper {
 
     void insertDiary(DiaryDto diary);
-
-    //List<DiaryDto> selectDiaryList(Long memberId);
-
+    
     List<DiaryDto> selectDiaryListPaged(@Param("memberId") Long memberId,
                                           @Param("offset") int offset,
                                           @Param("limit") int limit);

@@ -13,7 +13,7 @@
 <link rel="stylesheet" th:href="@{/css/diary-detail.css}">
 </head>
 <body class="sd-body">
-	<main class="container-fluid sd-main">
+	<main class="container sd-main">
 		<div class="row g-4 justify-content-center"
 			th:with="wcat=${diary.weatherIcon != null ?
                 (diary.weatherIcon.startsWith('01') ? 'sunny' :

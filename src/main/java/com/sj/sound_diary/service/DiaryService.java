@@ -8,8 +8,6 @@ import com.sj.sound_diary.dto.DiaryDto;
 public interface DiaryService {
 
     void createDiary(DiaryDto diary, Long memberId);
-
-    //List<DiaryDto> getDiaryList(Long memberId);
     
     List<DiaryDto> getDiaryListPaged(Long memberId, int offset, int limit);
     

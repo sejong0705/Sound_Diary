@@ -13,10 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLoading = false;
     let hasMore = true;
 
-    // ===== 삭제 =====
+    // ===== 삭제 (diary-list 전용) =====
     diaryGrid.addEventListener('click', async (e) => {
         if (!e.target.classList.contains('sd-delete-btn')) return;
-
         if (!confirm('이 일기를 삭제할까요?')) return;
 
         const id = e.target.dataset.id;
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error('delete failed');
 
             e.target.closest('.sd-diary-col').remove();
-            // 삭제 시 전체 개수도 다시 반영
             const current = parseInt(countLabel.textContent.replace(/[^0-9]/g, ''), 10) || 0;
             countLabel.textContent = `총 ${current - 1}개`;
         } catch (err) {
@@ -33,29 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ===== 날씨 분류/표시 유틸 (기존 그대로) =====
-    function classifyWeather(icon) {
-        if (!icon) return 'unknown';
-        if (icon.startsWith('01')) return 'sunny';
-        if (icon.startsWith('02') || icon.startsWith('03') || icon.startsWith('04') || icon.startsWith('50')) return 'cloudy';
-        if (icon.startsWith('09') || icon.startsWith('10') || icon.startsWith('11')) return 'rainy';
-        if (icon.startsWith('13')) return 'snowy';
-        return 'cloudy';
-    }
-
-    function weatherIconImg(icon) {
-        if (!icon) return '';
-        return `<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="" class="sd-weather-icon-img">`;
-    }
-
-    function formatDate(value) {
-        if (!value) return '';
-        const d = new Date(value);
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}.${m}.${day}`;
-    }
+    // classifyWeather, weatherIconImg, formatDate, applyCurrentFilter는 공통 파일 사용
 
     function renderCard(diary) {
         const wcat = classifyWeather(diary.weatherIcon);
@@ -76,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
             : '';
 
         col.innerHTML = `
-	<div class="card sd-diary-card h-100">
-	<div class="card-body d-flex flex-column">
-	  <div class="d-flex justify-content-between align-items-start mb-2">
-	    <h5 class="sd-card-title">${diary.title ?? '제목 없음'}</h5>
-	    <span class="badge sd-badge sd-weather-badge-img">${weatherIconImg(diary.weatherIcon)}</span>
-	  </div>
+      <div class="card sd-diary-card h-100">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="sd-card-title">${diary.title ?? '제목 없음'}</h5>
+            <span class="badge sd-badge sd-weather-badge-img">${weatherIconImg(diary.weatherIcon)}</span>
+          </div>
           <div class="sd-card-date">${formatDate(diary.createdAt)}</div>
           ${trackBlock}
           <p class="sd-card-content flex-grow-1">${(diary.content ?? '').slice(0, 80)}${(diary.content ?? '').length > 80 ? '…' : ''}</p>
@@ -92,19 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-
         return col;
     }
 
-    function applyCurrentFilter(col) {
-        const activeBtn = document.querySelector('.sd-filter-btn.active');
-        const filter = activeBtn ? activeBtn.dataset.filter : 'all';
-        if (filter !== 'all' && col.dataset.weather !== filter) {
-            col.classList.add('d-none');
-        }
-    }
-
-    // ===== 데이터 로드 (총계와 무관하게 화면 채우기용) =====
     async function loadMore() {
         if (isLoading || !hasMore) return;
         isLoading = true;
@@ -152,26 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     observer.observe(sentinel);
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    bindWeatherFilterButtons(filterBtns, filterEmptyMsg);
 
-            const filter = btn.dataset.filter;
-            const diaryCols = document.querySelectorAll('.sd-diary-col');
-            let visibleCount = 0;
-
-            diaryCols.forEach(col => {
-                const matches = filter === 'all' || col.dataset.weather === filter;
-                col.classList.toggle('d-none', !matches);
-                if (matches) visibleCount++;
-            });
-
-            filterEmptyMsg.classList.toggle('d-none', visibleCount !== 0);
-        });
-    });
-
-    // ===== 전체 개수는 별도 API로 처음에 한 번만 조회 =====
     async function loadTotalCount() {
         try {
             const res = await fetch('/api/diaries/count');
@@ -186,7 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTotalCount();
     loadMore();
 });
-// ===== 좌측 음악 검색 (선택 시 바로 재생만, 일기 저장과는 무관) =====
+
+// ===== 좌측 음악 검색 (diary-list 전용) =====
 const trackSearchInput = document.getElementById('trackSearchInput');
 const trackSearchBtn = document.getElementById('trackSearchBtn');
 const trackResultsBox = document.getElementById('trackResults');

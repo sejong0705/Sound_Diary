@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -39,12 +34,10 @@ public class SpotifyServiceImpl implements SpotifyService {
 
         return executeTrackSearch(url, accessToken);
     }
-
+    
     @Override
     public TrackDto getRecommendation(String artistId, String excludeTrackUri, String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+    	HttpEntity<Void> entity = buildAuthEntity(accessToken);
 
         // 1단계: 이 아티스트의 앨범/싱글 목록 조회 (최대 10개)
         String albumUrl = "https://api.spotify.com/v1/artists/" + artistId
@@ -66,7 +59,7 @@ public class SpotifyServiceImpl implements SpotifyService {
                 ? null : (String) albumImages.get(0).get("url");
 
         // 3단계: 그 앨범의 트랙 목록 조회
-        String tracksUrl = "https://api.spotify.com/v1/albums/" + albumId + "/tracks?limit=20";
+        String tracksUrl = "https://api.spotify.com/v1/albums/" + albumId + "/tracks?limit=10";
         Map<String, Object> trackResponse = restTemplate.exchange(tracksUrl, HttpMethod.GET, entity, Map.class).getBody();
         List<Map<String, Object>> items = (List<Map<String, Object>>) trackResponse.get("items");
 
@@ -99,9 +92,7 @@ public class SpotifyServiceImpl implements SpotifyService {
     
     // 검색 API 호출 + TrackDto 변환 (공통 로직)
     private List<TrackDto> executeTrackSearch(String url, String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+    	HttpEntity<Void> entity = buildAuthEntity(accessToken);
 
         Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
         Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
@@ -122,5 +113,11 @@ public class SpotifyServiceImpl implements SpotifyService {
                     .build());
         }
         return result;
+    }
+    //공통 로직 분리
+    private HttpEntity<Void> buildAuthEntity(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        return new HttpEntity<>(headers);
     }
 }

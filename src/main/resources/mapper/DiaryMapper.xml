@@ -10,94 +10,68 @@
 		MEMBER_ID, TITLE, CONTENT,
 		LATITUDE, LONGITUDE, LOCATION_NAME,
 		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
-		TRACK_NAME, ARTIST_NAME,
-		ALBUM_IMAGE_URL, SPOTIFY_TRACK_URI,
+		TRACK_NAME, ARTIST_NAME, ALBUM_IMAGE_URL, SPOTIFY_TRACK_URI,
 		IS_PUBLIC
 		) VALUES (
 		#{memberId},
 		#{title, jdbcType=VARCHAR},
 		#{content, jdbcType=CLOB},
-		#{latitude,
-		jdbcType=NUMERIC},
+		#{latitude, jdbcType=NUMERIC},
 		#{longitude, jdbcType=NUMERIC},
-		#{locationName,
-		jdbcType=VARCHAR},
+		#{locationName, jdbcType=VARCHAR},
 		#{weatherIcon, jdbcType=VARCHAR},
-		#{weatherDesc,
-		jdbcType=VARCHAR},
+		#{weatherDesc, jdbcType=VARCHAR},
 		#{weatherTemp, jdbcType=NUMERIC},
-		#{trackName,
-		jdbcType=VARCHAR},
+		#{trackName, jdbcType=VARCHAR},
 		#{artistName, jdbcType=VARCHAR},
-		#{albumImageUrl,
-		jdbcType=VARCHAR},
+		#{albumImageUrl, jdbcType=VARCHAR},
 		#{spotifyTrackUri, jdbcType=VARCHAR},
-		#{isPublic,
-		jdbcType=VARCHAR}
+		#{isPublic, jdbcType=VARCHAR}
 		)
 	</insert>
-
-	<!-- 내 일기 목록 (카드 그리드용 요약 정보만, LATITUDE/LONGITUDE/SPOTIFY_TRACK_URI는 목록에 
-		불필요해서 제외) -->
-	<select id="selectDiaryList" parameterType="long"
-		resultType="DiaryDto">
-		SELECT
-		DIARY_ID, MEMBER_ID, TITLE, CONTENT,
-		LOCATION_NAME,
-		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
-		TRACK_NAME, ARTIST_NAME,
-		ALBUM_IMAGE_URL,
-		IS_PUBLIC, CREATED_AT
-		FROM DIARY
-		WHERE MEMBER_ID =
-		#{memberId}
-		ORDER BY CREATED_AT DESC
-	</select>
-
-	<!-- 일기 상세 (음원 메타데이터 전부 포함) -->
-	<select id="selectDiaryById" parameterType="long"
-		resultType="DiaryDto">
-		SELECT
-		DIARY_ID, MEMBER_ID, TITLE, CONTENT,
-		LATITUDE,
-		LONGITUDE, LOCATION_NAME,
-		WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
-		TRACK_NAME, ARTIST_NAME, ALBUM_IMAGE_URL, SPOTIFY_TRACK_URI,
-		IS_PUBLIC
-		FROM DIARY
-		WHERE DIARY_ID = #{diaryId}
-	</select>
+	
+	<!-- 일기 상세 (음원 메타데이터 및 작성자 정보 포함) -->
+    <select id="selectDiaryById" parameterType="long" resultType="DiaryDto">
+        SELECT
+            D.DIARY_ID, D.MEMBER_ID, D.TITLE, D.CONTENT,
+            D.LATITUDE, D.LONGITUDE, D.LOCATION_NAME,
+            D.WEATHER_ICON, D.WEATHER_DESC, D.WEATHER_TEMP,
+            D.TRACK_NAME, D.ARTIST_NAME, D.ALBUM_IMAGE_URL, D.SPOTIFY_TRACK_URI,
+            D.IS_PUBLIC, D.CREATED_AT,
+            M.NICKNAME AS authorNickname,
+            M.PROFILE_IMG_URL AS authorProfileImgUrl
+        FROM DIARY D
+        JOIN MEMBER M ON D.MEMBER_ID = M.MEMBER_ID
+        WHERE D.DIARY_ID = #{diaryId}
+    </select>
 
 	<!-- 일기 수정: 지금은 텍스트/공개여부만, 추후 음원 재선택 수정 기능 붙이면 여기에 컬럼 추가 -->
 	<update id="updateDiary" parameterType="DiaryDto">
 		UPDATE DIARY
-		SET TITLE =
-		#{title, jdbcType=VARCHAR},
+		SET
+		TITLE = #{title, jdbcType=VARCHAR},
 		CONTENT = #{content, jdbcType=CLOB},
 		IS_PUBLIC = #{isPublic, jdbcType=VARCHAR},
 		UPDATED_AT = SYSDATE
-		WHERE
-		DIARY_ID = #{diaryId}
+		WHERE DIARY_ID = #{diaryId}
 	</update>
 
+	<!-- 일기 삭제 -->
 	<delete id="deleteDiary" parameterType="long">
-		DELETE FROM DIARY WHERE
-		DIARY_ID = #{diaryId}
+		DELETE FROM DIARY
+		WHERE DIARY_ID = #{diaryId}
 	</delete>
+
 	<!-- 페이징된 일기 목록: offset부터 limit개 -->
 	<select id="selectDiaryListPaged" resultType="DiaryDto">
 		SELECT
-		DIARY_ID,
-		MEMBER_ID, TITLE, CONTENT,
-		LOCATION_NAME, WEATHER_ICON, WEATHER_DESC,
-		WEATHER_TEMP,
+		DIARY_ID, MEMBER_ID, TITLE, CONTENT,
+		LOCATION_NAME, WEATHER_ICON, WEATHER_DESC, WEATHER_TEMP,
 		TRACK_NAME, ARTIST_NAME, ALBUM_IMAGE_URL,
-		IS_PUBLIC,
-		CREATED_AT
+		IS_PUBLIC, CREATED_AT
 		FROM DIARY
 		WHERE MEMBER_ID = #{memberId}
-		ORDER BY CREATED_AT
-		DESC
+		ORDER BY CREATED_AT DESC
 		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 
@@ -105,34 +79,31 @@
 	<select id="selectPublicDiaryListPaged" resultType="DiaryDto">
 		SELECT
 		D.DIARY_ID, D.MEMBER_ID, D.TITLE, D.CONTENT,
-		D.LOCATION_NAME,
-		D.WEATHER_ICON, D.WEATHER_DESC, D.WEATHER_TEMP,
-		D.TRACK_NAME,
-		D.ARTIST_NAME, D.ALBUM_IMAGE_URL,
+		D.LOCATION_NAME, D.WEATHER_ICON, D.WEATHER_DESC, D.WEATHER_TEMP,
+		D.TRACK_NAME, D.ARTIST_NAME, D.ALBUM_IMAGE_URL,
 		D.IS_PUBLIC, D.CREATED_AT,
-		M.NICKNAME
-		AS authorNickname,
+		M.NICKNAME AS authorNickname,
 		M.PROFILE_IMG_URL AS authorProfileImgUrl
 		FROM DIARY D
-		JOIN MEMBER M ON D.MEMBER_ID =
-		M.MEMBER_ID
+		JOIN MEMBER M ON D.MEMBER_ID = M.MEMBER_ID
 		WHERE D.IS_PUBLIC = 'Y'
-		ORDER
-		BY D.CREATED_AT DESC
-		OFFSET
-		#{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+		ORDER BY D.CREATED_AT DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 
 	<!-- 내 일기 전체 개수 -->
 	<select id="countDiaryByMemberId" parameterType="long"
 		resultType="int">
-		SELECT COUNT(*) FROM DIARY WHERE MEMBER_ID = #{memberId}
+		SELECT COUNT(*)
+		FROM DIARY
+		WHERE MEMBER_ID = #{memberId}
 	</select>
 
 	<!-- 감성 광장 공개 게시물 전체 개수 -->
 	<select id="countPublicDiary" resultType="int">
-		SELECT COUNT(*) FROM
-		DIARY WHERE IS_PUBLIC = 'Y'
+		SELECT COUNT(*)
+		FROM DIARY
+		WHERE IS_PUBLIC = 'Y'
 	</select>
 
 	<!-- 오늘의 인기곡 Top 5 (곡+아티스트+앨범이미지+재생URI) -->
@@ -151,4 +122,5 @@
 		ORDER BY cnt DESC
 		FETCH FIRST 5 ROWS ONLY
 	</select>
+
 </mapper>

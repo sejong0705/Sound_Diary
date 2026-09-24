@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.sj.sound_diary.dto.TrackDto;
-import com.sj.sound_diary.mapper.MemberMapper;
+import com.sj.sound_diary.service.MemberService;
 import com.sj.sound_diary.service.SpotifyAuthService;
 import com.sj.sound_diary.service.SpotifyService;
 
@@ -25,7 +25,7 @@ public class SpotifyController {
 
     private final SpotifyService spotifyService;
     private final SpotifyAuthService spotifyAuthService;
-    private final MemberMapper memberMapper;
+    private final MemberService memberService;
 
     // 좌측 검색 패널에서 사용
     @GetMapping("/search")
@@ -57,7 +57,7 @@ public class SpotifyController {
     // refreshAndUpdateSession(): refresh_token으로 새 토큰 발급받아 세션 갱신
     private String refreshAndUpdateSession(HttpSession session) {
         Long memberId = (Long) session.getAttribute("memberId");
-        String refreshToken = memberMapper.selectRefreshTokenByMemberId(memberId);
+        String refreshToken = memberService.getRefreshToken(memberId);
         Map<String, Object> result = spotifyAuthService.refreshAccessToken(refreshToken);
         String newAccessToken = (String) result.get("access_token");
         session.setAttribute("accessToken", newAccessToken);

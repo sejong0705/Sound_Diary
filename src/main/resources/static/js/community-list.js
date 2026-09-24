@@ -10,32 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const PAGE_SIZE = 12;
   let offset = 0;
-  let totalCount = 0;
   let isLoading = false;
   let hasMore = true;
 
-  function classifyWeather(icon) {
-    if (!icon) return 'unknown';
-    if (icon.startsWith('01')) return 'sunny';
-    if (icon.startsWith('02') || icon.startsWith('03') || icon.startsWith('04') || icon.startsWith('50')) return 'cloudy';
-    if (icon.startsWith('09') || icon.startsWith('10') || icon.startsWith('11')) return 'rainy';
-    if (icon.startsWith('13')) return 'snowy';
-    return 'cloudy';
-  }
-
-  function weatherIconImg(icon) {
-    if (!icon) return '';
-    return `<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="" class="sd-weather-icon-img">`;
-  }
-
-  function formatDate(value) {
-    if (!value) return '';
-    const d = new Date(value);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}.${m}.${day}`;
-  }
+  // classifyWeather, weatherIconImg, formatDate, applyCurrentFilter는 공통 파일 사용
 
   function renderCard(diary) {
     const wcat = classifyWeather(diary.weatherIcon);
@@ -55,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>`
       : '';
 
-    // 프로필 이미지가 없으면 기본 이미지로 대체
     const profileImg = diary.authorProfileImgUrl && diary.authorProfileImgUrl.trim() !== ''
       ? diary.authorProfileImgUrl
       : '/images/default-profile.png';
@@ -81,16 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-
     return col;
-  }
-
-  function applyCurrentFilter(col) {
-    const activeBtn = document.querySelector('.sd-filter-btn.active');
-    const filter = activeBtn ? activeBtn.dataset.filter : 'all';
-    if (filter !== 'all' && col.dataset.weather !== filter) {
-      col.classList.add('d-none');
-    }
   }
 
   async function loadMore() {
@@ -140,24 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   observer.observe(sentinel);
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  bindWeatherFilterButtons(filterBtns, filterEmptyMsg);
 
-      const filter = btn.dataset.filter;
-      const diaryCols = document.querySelectorAll('.sd-diary-col');
-      let visibleCount = 0;
-
-      diaryCols.forEach(col => {
-        const matches = filter === 'all' || col.dataset.weather === filter;
-        col.classList.toggle('d-none', !matches);
-        if (matches) visibleCount++;
-      });
-
-      filterEmptyMsg.classList.toggle('d-none', visibleCount !== 0);
-    });
-  });
   async function loadTotalCount() {
     try {
       const res = await fetch('/api/community/count');
@@ -173,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadMore();
 });
 
-// ===== 좌측 랭킹 패널 =====
+// ===== 좌측 랭킹 패널 (community-list 전용) =====
 const rankingList = document.getElementById('rankingList');
 
 async function loadRanking() {
@@ -205,7 +157,6 @@ async function loadRanking() {
       </div>
     `).join('');
 
-    // 클릭 시 하단 재생바에서 재생
     document.querySelectorAll('.sd-ranking-clickable').forEach(el => {
       el.addEventListener('click', () => {
         const uri = el.dataset.uri;

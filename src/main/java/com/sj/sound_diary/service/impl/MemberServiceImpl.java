@@ -35,4 +35,9 @@ public class MemberServiceImpl implements MemberService {
             return existing.getMemberId();
         }
     }
+    
+    @Override
+    public String getRefreshToken(Long memberId) {
+        return memberMapper.selectRefreshTokenByMemberId(memberId);
+    }
 }

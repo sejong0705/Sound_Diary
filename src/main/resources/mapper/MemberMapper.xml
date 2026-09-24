@@ -30,8 +30,8 @@
         WHERE SPOTIFY_ID = #{spotifyId}
     </update>
     
-    <!-- 토근 조회 메서드 -->
+    <!-- 토큰 조회 메서드 -->
     <select id="selectRefreshTokenByMemberId" parameterType="long" resultType="string">
-    SELECT REFRESH_TOKEN FROM MEMBER WHERE MEMBER_ID = #{memberId}
+    	SELECT REFRESH_TOKEN FROM MEMBER WHERE MEMBER_ID = #{memberId}
 	</select>
 </mapper>

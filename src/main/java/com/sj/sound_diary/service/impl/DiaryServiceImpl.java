@@ -16,28 +16,16 @@ import lombok.RequiredArgsConstructor;
 public class DiaryServiceImpl implements DiaryService {
 
     private final DiaryMapper diaryMapper;
-
-    // TEMP_MEMBER_ID 삭제 — 이제 컨트롤러가 세션에서 꺼내 넘겨줌
-
+    
     @Override
     public void createDiary(DiaryDto diary, Long memberId) {
-        if (diary.getTitle() == null || diary.getTitle().trim().isEmpty()) {
-            throw new IllegalArgumentException("제목은 비워둘 수 없습니다.");
-        }
-        if (diary.getContent() == null || diary.getContent().trim().isEmpty()) {
-            throw new IllegalArgumentException("일기 내용은 비워둘 수 없습니다.");
-        }
+    	validate(diary);
         diary.setMemberId(memberId);
         if (diary.getIsPublic() == null) {
             diary.setIsPublic("N");
         }
         diaryMapper.insertDiary(diary);
     }
-
-//    @Override
-//    public List<DiaryDto> getDiaryList(Long memberId) {
-//        return diaryMapper.selectDiaryList(memberId);
-//    }
     
     @Override
     public List<DiaryDto> getDiaryListPaged(Long memberId, int offset, int limit) {
@@ -51,12 +39,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public void updateDiary(Long diaryId, DiaryDto diary) {
-        if (diary.getTitle() == null || diary.getTitle().trim().isEmpty()) {
-            throw new IllegalArgumentException("제목은 비워둘 수 없습니다.");
-        }
-        if (diary.getContent() == null || diary.getContent().trim().isEmpty()) {
-            throw new IllegalArgumentException("일기 내용은 비워둘 수 없습니다.");
-        }
+    	validate(diary);
         diary.setDiaryId(diaryId);
         diaryMapper.updateDiary(diary);
     }
@@ -84,4 +67,15 @@ public class DiaryServiceImpl implements DiaryService {
     public List<Map<String, Object>> getTopTracks() {
         return diaryMapper.selectTopTracks();
     }
+    
+    //공통 로직 분리
+    private void validate(DiaryDto diary) {
+        if (diary.getTitle() == null || diary.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("제목은 비워둘 수 없습니다.");
+        }
+        if (diary.getContent() == null || diary.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("일기 내용은 비워둘 수 없습니다.");
+        }
+    }
+    
 }

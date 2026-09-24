@@ -54,8 +54,4 @@ public class DiaryFormController {
         diaryService.updateDiary(id, diaryDto);
         return "redirect:/diary/detail/" + id;
     }
-    @GetMapping("/app")
-    public String appShell() {
-        return "app-shell";
-    }
 }
