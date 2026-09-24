@@ -1,7 +1,6 @@
 package com.sj.sound_diary.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sj.sound_diary.dto.DiaryDto;
+import com.sj.sound_diary.dto.TrackRankingDto;
 import com.sj.sound_diary.service.DiaryService;
 import com.sj.sound_diary.util.SessionUtils;
 
@@ -58,7 +58,7 @@ public class CommunityController {
     }
     @GetMapping("/api/community/ranking")
     @ResponseBody
-    public List<Map<String, Object>> getRanking() {
+    public List<TrackRankingDto> getRanking() {
         return diaryService.getTopTracks();
     }
 }

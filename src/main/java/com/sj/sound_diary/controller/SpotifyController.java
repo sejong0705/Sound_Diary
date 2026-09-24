@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.sj.sound_diary.dto.SpotifyTokenResponseDto;
 import com.sj.sound_diary.dto.TrackDto;
 import com.sj.sound_diary.service.MemberService;
 import com.sj.sound_diary.service.SpotifyAuthService;
@@ -59,8 +60,8 @@ public class SpotifyController {
     private String refreshAndUpdateSession(HttpSession session) {
         Long memberId = SessionUtils.attr(session, "memberId");
         String refreshToken = memberService.getRefreshToken(memberId);
-        Map<String, Object> result = spotifyAuthService.refreshAccessToken(refreshToken);
-        String newAccessToken = (String) result.get("access_token");
+        SpotifyTokenResponseDto result = spotifyAuthService.refreshAccessToken(refreshToken);
+        String newAccessToken = result.getAccessToken();
         session.setAttribute("accessToken", newAccessToken);
         return newAccessToken;
     }

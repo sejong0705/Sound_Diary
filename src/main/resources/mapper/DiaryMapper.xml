@@ -107,7 +107,7 @@
 	</select>
 
 	<!-- 오늘의 인기곡 Top 5 (곡+아티스트+앨범이미지+재생URI) -->
-	<select id="selectTopTracks" resultType="map">
+	<select id="selectTopTracks" resultType="TrackRankingDto">
 		SELECT
 		TRACK_NAME AS trackName,
 		ARTIST_NAME AS artistName,

@@ -1,9 +1,9 @@
 package com.sj.sound_diary.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.sj.sound_diary.dto.DiaryDto;
+import com.sj.sound_diary.dto.TrackRankingDto;
 
 public interface DiaryService {
 
@@ -23,5 +23,5 @@ public interface DiaryService {
     //광장 전체 다이어리 개수
     int getPublicDiaryCount();
     
-    List<Map<String, Object>> getTopTracks();
+    List<TrackRankingDto> getTopTracks();
 }

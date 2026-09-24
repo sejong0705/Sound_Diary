@@ -2,6 +2,7 @@ package com.sj.sound_diary.service.impl;
 
 import com.sj.sound_diary.dto.WeatherDto;
 import com.sj.sound_diary.service.WeatherService;
+import com.sj.sound_diary.util.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,14 +36,15 @@ public class WeatherServiceImpl implements WeatherService {
 
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
 
-        List<Map<String, Object>> weatherList = (List<Map<String, Object>>) response.get("weather");
+        List<Map<String, Object>> weatherList = JsonUtils.field(response, "weather");
         Map<String, Object> weather = weatherList.get(0);
-        Map<String, Object> main = (Map<String, Object>) response.get("main");
+        Map<String, Object> main = JsonUtils.field(response, "main");
+        Number temp = JsonUtils.field(main, "temp");
 
         return WeatherDto.builder()
-                .description((String) weather.get("description"))
-                .icon((String) weather.get("icon"))
-                .temp(((Number) main.get("temp")).doubleValue())
+                .description(JsonUtils.field(weather, "description"))
+                .icon(JsonUtils.field(weather, "icon"))
+                .temp(temp.doubleValue())
                 .build();
     }
 }

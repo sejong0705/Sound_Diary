@@ -155,17 +155,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             rankingList.innerHTML = list.map((item, idx) => `
       <div class="sd-ranking-item sd-ranking-clickable"
-           data-uri="${item.SPOTIFYTRACKURI ?? ''}"
-           data-name="${item.TRACKNAME ?? ''}"
-           data-artist="${item.ARTISTNAME ?? ''}"
-           data-image="${item.ALBUMIMAGEURL ?? ''}">
+           data-uri="${item.spotifyTrackUri ?? ''}"
+           data-name="${item.trackName ?? ''}"
+           data-artist="${item.artistName ?? ''}"
+           data-image="${item.albumImageUrl ?? ''}">
         <span class="sd-ranking-rank">${idx + 1}</span>
-        <img src="${item.ALBUMIMAGEURL ?? ''}" alt="" class="sd-ranking-cover" onerror="this.style.visibility='hidden'">
+        <img src="${item.albumImageUrl ?? ''}" alt="" class="sd-ranking-cover" onerror="this.style.visibility='hidden'">
         <div class="sd-ranking-info">
-          <div class="sd-ranking-track">${item.TRACKNAME}</div>
-          <div class="sd-ranking-artist">${item.ARTISTNAME}</div>
+          <div class="sd-ranking-track">${item.trackName}</div>
+          <div class="sd-ranking-artist">${item.artistName}</div>
         </div>
-        <span class="sd-ranking-count">${item.CNT}회</span>
+        <span class="sd-ranking-count">${item.cnt}회</span>
       </div>
     `).join('');
 

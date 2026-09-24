@@ -1,11 +1,11 @@
 package com.sj.sound_diary.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.sj.sound_diary.dto.DiaryDto;
+import com.sj.sound_diary.dto.TrackRankingDto;
 import com.sj.sound_diary.mapper.DiaryMapper;
 import com.sj.sound_diary.service.DiaryService;
 
@@ -64,7 +64,7 @@ public class DiaryServiceImpl implements DiaryService {
         return diaryMapper.countPublicDiary();
     }
     @Override
-    public List<Map<String, Object>> getTopTracks() {
+    public List<TrackRankingDto> getTopTracks() {
         return diaryMapper.selectTopTracks();
     }
     

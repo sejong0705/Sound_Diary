@@ -1,12 +1,12 @@
 package com.sj.sound_diary.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.sj.sound_diary.dto.DiaryDto;
+import com.sj.sound_diary.dto.TrackRankingDto;
 
 @Mapper
 public interface DiaryMapper {
@@ -29,5 +29,5 @@ public interface DiaryMapper {
     //감성 광장 공개 게시물 전체 개수
     int countPublicDiary();
     //오늘의 인기곡
-    List<Map<String, Object>> selectTopTracks();
+    List<TrackRankingDto> selectTopTracks();
 }
