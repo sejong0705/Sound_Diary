@@ -51,3 +51,12 @@ function bindWeatherFilterButtons(filterBtns, filterEmptyMsg) {
     });
   });
 }
+// 현재 필터 기준으로 "해당 날씨 없음" 문구 갱신
+// 더 불러올 데이터가 남아 있으면 아직 "없다"고 단정하지 않음
+function updateFilterEmptyMsg(filterEmptyMsg, hasMore) {
+  const activeBtn = document.querySelector('.sd-filter-btn.active');
+  const filter = activeBtn ? activeBtn.dataset.filter : 'all';
+  const visible = document.querySelectorAll('.sd-diary-col:not(.d-none)').length;
+  const showMsg = filter !== 'all' && visible === 0 && !hasMore;
+  filterEmptyMsg.classList.toggle('d-none', !showMsg);
+}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sj.sound_diary.dto.DiaryDto;
 import com.sj.sound_diary.service.DiaryService;
+import com.sj.sound_diary.util.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,7 +43,7 @@ public class CommunityController {
     @GetMapping("/community/detail/{id}")
     public String detailPage(@PathVariable("id") Long id, Model model, HttpSession session) {
         DiaryDto diary = diaryService.getDiaryDetail(id);
-        Long currentMemberId = (Long) session.getAttribute("memberId");
+        Long currentMemberId = SessionUtils.attr(session, "memberId");
 
         model.addAttribute("diary", diary);
         model.addAttribute("isOwner", diary.getMemberId().equals(currentMemberId));

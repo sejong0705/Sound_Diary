@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const locationBadge = document.getElementById('locationBadge');
+    const locationText = document.getElementById('locationText');
     const weatherBadge = document.getElementById('weatherBadge');
     if (!weatherBadge) return;
 

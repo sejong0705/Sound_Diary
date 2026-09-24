@@ -103,10 +103,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
     });
-});
-const publicToggleUI = document.getElementById('publicToggleUI');
-const isPublicField = document.getElementById('isPublicField');
+	
+	const publicToggleUI = document.getElementById('publicToggleUI');
+	const isPublicField = document.getElementById('isPublicField');
 
-publicToggleUI.addEventListener('change', () => {
-    isPublicField.value = publicToggleUI.checked ? 'Y' : 'N';
+	publicToggleUI.addEventListener('change', () => {
+	    isPublicField.value = publicToggleUI.checked ? 'Y' : 'N';
+	});
 });

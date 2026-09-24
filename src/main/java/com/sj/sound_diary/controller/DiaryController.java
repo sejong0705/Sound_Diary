@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sj.sound_diary.dto.DiaryDto;
 import com.sj.sound_diary.service.DiaryService;
+import com.sj.sound_diary.util.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +29,7 @@ public class DiaryController {
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int limit,
             HttpSession session) {
-        Long memberId = (Long) session.getAttribute("memberId");
+        Long memberId = SessionUtils.attr(session, "memberId");
         return diaryService.getDiaryListPaged(memberId, offset, limit);
     }
     
@@ -39,7 +40,7 @@ public class DiaryController {
     }
     @GetMapping("/count")
     public int getDiaryCount(HttpSession session) {
-        Long memberId = (Long) session.getAttribute("memberId");
+        Long memberId = SessionUtils.attr(session, "memberId");
         return diaryService.getDiaryCount(memberId);
     }
 }

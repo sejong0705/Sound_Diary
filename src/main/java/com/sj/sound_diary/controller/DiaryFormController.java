@@ -2,6 +2,7 @@ package com.sj.sound_diary.controller;
 
 import com.sj.sound_diary.dto.DiaryDto;
 import com.sj.sound_diary.service.DiaryService;
+import com.sj.sound_diary.util.SessionUtils;
 import lombok.RequiredArgsConstructor;
 
 import javax.servlet.http.HttpSession;
@@ -28,7 +29,7 @@ public class DiaryFormController {
     //작성 후 등록하기 버튼을 눌렀을 때
     @PostMapping("/diary/write")
     public String submitDiary(@ModelAttribute DiaryDto diaryDto, HttpSession session) {
-        Long memberId = (Long) session.getAttribute("memberId");
+        Long memberId = SessionUtils.attr(session, "memberId");
         diaryService.createDiary(diaryDto, memberId);
         return "redirect:/diary/list";
     }

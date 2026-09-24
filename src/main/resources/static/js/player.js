@@ -130,10 +130,6 @@ window.SDPlayer = (function() {
         }
     }
 
-    function extractId(uri) {
-        return uri.split(':').pop();
-    }
-
     window.onSpotifyWebPlaybackSDKReady = async () => {
         accessToken = await fetchToken();
         if (!accessToken) return;

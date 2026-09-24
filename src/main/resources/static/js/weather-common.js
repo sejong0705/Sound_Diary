@@ -22,6 +22,7 @@ window.SDWeather = (function() {
 	  return parsed;
 	}
     function setCached(data) {
+		data.fetchedAt = Date.now();
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 

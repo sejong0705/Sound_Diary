@@ -15,6 +15,7 @@ import com.sj.sound_diary.dto.TrackDto;
 import com.sj.sound_diary.service.MemberService;
 import com.sj.sound_diary.service.SpotifyAuthService;
 import com.sj.sound_diary.service.SpotifyService;
+import com.sj.sound_diary.util.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ public class SpotifyController {
     // 좌측 검색 패널에서 사용
     @GetMapping("/search")
     public List<TrackDto> search(@RequestParam String q, HttpSession session) {
-        String accessToken = (String) session.getAttribute("accessToken");
+        String accessToken = SessionUtils.attr(session, "accessToken");
 
         try {
             return spotifyService.searchTracks(q, accessToken);
@@ -43,7 +44,7 @@ public class SpotifyController {
     // getToken(): 세션에 있는 토큰을 그냥 그대로 반환 (검증 없음)
     @GetMapping("/token")
     public Map<String, String> getToken(HttpSession session) {
-        String accessToken = (String) session.getAttribute("accessToken");
+        String accessToken = SessionUtils.attr(session, "accessToken");
 
         try {
             spotifyAuthService.getSpotifyProfile(accessToken);
@@ -56,7 +57,7 @@ public class SpotifyController {
 
     // refreshAndUpdateSession(): refresh_token으로 새 토큰 발급받아 세션 갱신
     private String refreshAndUpdateSession(HttpSession session) {
-        Long memberId = (Long) session.getAttribute("memberId");
+        Long memberId = SessionUtils.attr(session, "memberId");
         String refreshToken = memberService.getRefreshToken(memberId);
         Map<String, Object> result = spotifyAuthService.refreshAccessToken(refreshToken);
         String newAccessToken = (String) result.get("access_token");
@@ -69,7 +70,7 @@ public class SpotifyController {
             @RequestParam String artistId,
             @RequestParam String excludeUri,
             HttpSession session) {
-        String accessToken = (String) session.getAttribute("accessToken");
+        String accessToken = SessionUtils.attr(session, "accessToken");
 
         try {
             return spotifyService.getRecommendation(artistId, excludeUri, accessToken);

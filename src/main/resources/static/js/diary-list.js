@@ -108,8 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
             isLoading = false;
             loadingIndicator.classList.add('d-none');
         }
+        // 추가: 문구 재계산 + sentinel이 아직 보이면 계속 로드
+        updateFilterEmptyMsg(filterEmptyMsg, hasMore);
+        if (hasMore && isSentinelVisible()) loadMore();
     }
-
+    function isSentinelVisible() {
+        const rect = sentinel.getBoundingClientRect();
+        return rect.top < window.innerHeight + 200;   // observer의 rootMargin과 동일
+    }
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) loadMore();
@@ -119,7 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(sentinel);
 
     bindWeatherFilterButtons(filterBtns, filterEmptyMsg);
-
+    // 필터 적용 후 보이는 카드가 부족하면 이어서 로드
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            updateFilterEmptyMsg(filterEmptyMsg, hasMore);
+            if (hasMore && isSentinelVisible()) loadMore();
+        });
+    });
     async function loadTotalCount() {
         try {
             const res = await fetch('/api/diaries/count');
@@ -135,32 +147,33 @@ document.addEventListener('DOMContentLoaded', () => {
     loadMore();
 });
 
-// ===== 좌측 음악 검색 (diary-list 전용) =====
-const trackSearchInput = document.getElementById('trackSearchInput');
-const trackSearchBtn = document.getElementById('trackSearchBtn');
-const trackResultsBox = document.getElementById('trackResults');
+document.addEventListener('DOMContentLoaded', () => {
+    // ===== 좌측 음악 검색 (diary-list 전용) =====
+    const trackSearchInput = document.getElementById('trackSearchInput');
+    const trackSearchBtn = document.getElementById('trackSearchBtn');
+    const trackResultsBox = document.getElementById('trackResults');
 
-async function doTrackSearch() {
-    const q = trackSearchInput.value.trim();
-    if (!q) return;
+    async function doTrackSearch() {
+        const q = trackSearchInput.value.trim();
+        if (!q) return;
 
-    trackResultsBox.innerHTML = '<div class="sd-status">검색 중…</div>';
+        trackResultsBox.innerHTML = '<div class="sd-status">검색 중…</div>';
 
-    try {
-        const res = await fetch(`/api/spotify/search?q=${encodeURIComponent(q)}`);
-        if (!res.ok) throw new Error('search failed');
-        const tracks = await res.json();
+        try {
+            const res = await fetch(`/api/spotify/search?q=${encodeURIComponent(q)}`);
+            if (!res.ok) throw new Error('search failed');
+            const tracks = await res.json();
 
-        trackResultsBox.innerHTML = '';
-        if (tracks.length === 0) {
-            trackResultsBox.innerHTML = '<div class="sd-status">검색 결과가 없어요.</div>';
-            return;
-        }
+            trackResultsBox.innerHTML = '';
+            if (tracks.length === 0) {
+                trackResultsBox.innerHTML = '<div class="sd-status">검색 결과가 없어요.</div>';
+                return;
+            }
 
-        tracks.forEach(track => {
-            const item = document.createElement('div');
-            item.className = 'sd-track-result-item';
-            item.innerHTML = `
+            tracks.forEach(track => {
+                const item = document.createElement('div');
+                item.className = 'sd-track-result-item';
+                item.innerHTML = `
         <img src="${track.albumImageUrl ?? ''}" alt="" class="sd-track-thumb"
              style="width:36px;height:36px;border-radius:4px;object-fit:cover;flex-shrink:0;">
         <div>
@@ -168,21 +181,23 @@ async function doTrackSearch() {
           <div class="sd-track-artist">${track.artistName}</div>
         </div>
       `;
-            item.addEventListener('click', () => {
-                if (parent.SDPlayer) {
-                    parent.SDPlayer.playTrack(track.uri, track.name, track.artistName, track.albumImageUrl, track.artistId);
-                }
+                item.addEventListener('click', () => {
+                    if (parent.SDPlayer) {
+                        parent.SDPlayer.playTrack(track.uri, track.name, track.artistName, track.albumImageUrl, track.artistId);
+                    }
+                });
+                trackResultsBox.appendChild(item);
             });
-            trackResultsBox.appendChild(item);
-        });
-    } catch (e) {
-        trackResultsBox.innerHTML = '<div class="sd-status error">검색에 실패했어요.</div>';
+        } catch (e) {
+            trackResultsBox.innerHTML = '<div class="sd-status error">검색에 실패했어요.</div>';
+        }
     }
-}
 
-if (trackSearchBtn) {
-    trackSearchBtn.addEventListener('click', doTrackSearch);
-    trackSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); doTrackSearch(); }
-    });
-}
+    if (trackSearchBtn) {
+        trackSearchBtn.addEventListener('click', doTrackSearch);
+        trackSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); doTrackSearch(); }
+
+        });
+    }
+});
