@@ -54,12 +54,14 @@
 		IS_PUBLIC = #{isPublic, jdbcType=VARCHAR},
 		UPDATED_AT = SYSDATE
 		WHERE DIARY_ID = #{diaryId}
+		AND MEMBER_ID = #{memberId}
 	</update>
 
-	<!-- 일기 삭제 -->
-	<delete id="deleteDiary" parameterType="long">
+	<!-- 일기 삭제 (본인 글만 삭제되도록 MEMBER_ID 조건 포함) -->
+	<delete id="deleteDiary">
 		DELETE FROM DIARY
 		WHERE DIARY_ID = #{diaryId}
+		AND MEMBER_ID = #{memberId}
 	</delete>
 
 	<!-- 페이징된 일기 목록: offset부터 limit개 -->

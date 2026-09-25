@@ -42,8 +42,12 @@ public class CommunityController {
     // 광장 상세보기 (본인 글이면 isOwner=true로 수정/삭제 버튼 노출)
     @GetMapping("/community/detail/{id}")
     public String detailPage(@PathVariable("id") Long id, Model model, HttpSession session) {
-        DiaryDto diary = diaryService.getDiaryDetail(id);
         Long currentMemberId = SessionUtils.attr(session, "memberId");
+        DiaryDto diary = diaryService.getDiaryDetail(id, currentMemberId);
+        if (diary == null) {
+            // 없는 글이거나 남의 비공개 글
+            return "redirect:/community/list";
+        }
 
         model.addAttribute("diary", diary);
         model.addAttribute("isOwner", diary.getMemberId().equals(currentMemberId));

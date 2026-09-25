@@ -40,19 +40,30 @@ public class DiaryFormController {
         return "diary-list";
     }
     
-    // 상세보기 (본인 일기 — 수정/삭제 버튼 노출)
+    // 상세보기 (본인 글일 때만 수정/삭제 버튼 노출)
     @GetMapping("/diary/detail/{id}")
-    public String detailPage(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("diary", diaryService.getDiaryDetail(id));
-        model.addAttribute("isOwner", true);  // 나중에 감성 광장에서 재사용 시 false로 넘기면 수정/삭제 버튼 숨겨짐
+    public String detailPage(@PathVariable("id") Long id, Model model, HttpSession session) {
+        Long currentMemberId = SessionUtils.attr(session, "memberId");
+        DiaryDto diary = diaryService.getDiaryDetail(id, currentMemberId);
+        if (diary == null) {
+            // 없는 글이거나 남의 비공개 글
+            return "redirect:/diary/list";
+        }
+
+        model.addAttribute("diary", diary);
+        model.addAttribute("isOwner", diary.getMemberId().equals(currentMemberId));
         model.addAttribute("backUrl", "/diary/list");
         return "diary-detail";
     }
 
     // 수정 저장
     @PostMapping("/diary/detail/{id}")
-    public String updateDiary(@PathVariable("id") Long id, @ModelAttribute DiaryDto diaryDto) {
-        diaryService.updateDiary(id, diaryDto);
+    public String updateDiary(@PathVariable("id") Long id, @ModelAttribute DiaryDto diaryDto, HttpSession session) {
+        Long memberId = SessionUtils.attr(session, "memberId");
+        if (!diaryService.updateDiary(id, diaryDto, memberId)) {
+            // 존재하지 않거나 본인 글이 아닌 경우
+            return "redirect:/diary/list";
+        }
         return "redirect:/diary/detail/" + id;
     }
 }

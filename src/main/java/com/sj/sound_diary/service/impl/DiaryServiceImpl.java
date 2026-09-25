@@ -33,20 +33,27 @@ public class DiaryServiceImpl implements DiaryService {
     }
     
     @Override
-    public DiaryDto getDiaryDetail(Long diaryId) {
-        return diaryMapper.selectDiaryById(diaryId);
+    public DiaryDto getDiaryDetail(Long diaryId, Long memberId) {
+        DiaryDto diary = diaryMapper.selectDiaryById(diaryId);
+        if (diary == null) {
+            return null;
+        }
+        boolean isOwner = diary.getMemberId().equals(memberId);
+        boolean isPublic = "Y".equals(diary.getIsPublic());
+        return (isOwner || isPublic) ? diary : null;
     }
 
     @Override
-    public void updateDiary(Long diaryId, DiaryDto diary) {
+    public boolean updateDiary(Long diaryId, DiaryDto diary, Long memberId) {
     	validate(diary);
         diary.setDiaryId(diaryId);
-        diaryMapper.updateDiary(diary);
+        diary.setMemberId(memberId); // 폼에서 넘어온 memberId가 아니라 세션 값으로 덮어씀
+        return diaryMapper.updateDiary(diary) > 0;
     }
 
     @Override
-    public void deleteDiary(Long diaryId) {
-        diaryMapper.deleteDiary(diaryId);
+    public boolean deleteDiary(Long diaryId, Long memberId) {
+        return diaryMapper.deleteDiary(diaryId, memberId) > 0;
     }
     
     @Override

@@ -19,9 +19,11 @@ public interface DiaryMapper {
 
     DiaryDto selectDiaryById(Long diaryId);
 
-    void updateDiary(DiaryDto diary);
+    // 반환값: 수정된 행 수 (본인 글이 아니면 0)
+    int updateDiary(DiaryDto diary);
 
-    void deleteDiary(Long diaryId);
+    // 반환값: 삭제된 행 수 (본인 글이 아니면 0)
+    int deleteDiary(@Param("diaryId") Long diaryId, @Param("memberId") Long memberId);
     //감성 광장용 페이징 목록
     List<DiaryDto> selectPublicDiaryListPaged(@Param("offset") int offset, @Param("limit") int limit);
     //내 일기 전체 개수

@@ -11,11 +11,14 @@ public interface DiaryService {
     
     List<DiaryDto> getDiaryListPaged(Long memberId, int offset, int limit);
     
-    DiaryDto getDiaryDetail(Long diaryId);
+    // 없는 글이거나, 남의 비공개 글이면 null
+    DiaryDto getDiaryDetail(Long diaryId, Long memberId);
 
-    void updateDiary(Long diaryId, DiaryDto diary);
+    // 본인 글이 아니면 false
+    boolean updateDiary(Long diaryId, DiaryDto diary, Long memberId);
 
-    void deleteDiary(Long diaryId);
+    // 본인 글이 아니면 false
+    boolean deleteDiary(Long diaryId, Long memberId);
     
     List<DiaryDto> getPublicDiaryListPaged(int offset, int limit);
     //내 다이어리 개수
