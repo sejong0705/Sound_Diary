@@ -212,11 +212,3 @@ sequenceDiagram
    ```
 3. Spotify Developer Dashboard에 위 `redirect-uri`를 등록합니다.
 4. 실행 후 `http://localhost:8080/app` 에 접속합니다.
-
----
-
-## 📝 8. 개선 예정
-
-* refresh_token 암호화 저장
-* 세션 쿠키 `Secure` / `SameSite` 옵션 명시, CSRF 방어
-* `SpotifyServiceImpl`, `LocationServiceImpl`의 응답 파싱도 DTO로 전환해 파싱 방식 통일
