@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         weatherTempField.value = weather.temp;
 
         weatherStatus.textContent = `${weather.description} · ${Math.round(weather.temp)}°C`;
+
+        // 받아온 날씨와 같은 분류(맑음/비/흐림/눈)의 버튼을 자동 선택 (hidden 값은 실제 날씨 그대로 유지)
+        const category = classifyWeather(weather.icon);
+        weatherBtns.forEach(btn => {
+            btn.classList.toggle('active', classifyWeather(btn.dataset.icon) === category);
+        });
     } catch (e) {
         weatherStatus.textContent = '날씨 정보를 가져오지 못했어요';
     }
