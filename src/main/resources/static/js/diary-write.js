@@ -116,4 +116,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 	publicToggleUI.addEventListener('change', () => {
 	    isPublicField.value = publicToggleUI.checked ? 'Y' : 'N';
 	});
+
+	// 공백만 입력한 경우도 막기 (required는 공백을 통과시킴)
+	const writeForm = document.getElementById('writeForm');
+	writeForm.addEventListener('submit', (e) => {
+	    const titleField = writeForm.querySelector('input[name="title"]');
+	    const contentField = writeForm.querySelector('textarea[name="content"]');
+
+	    if (!titleField.value.trim()) {
+	        e.preventDefault();
+	        alert('제목을 비워둘 수 없어요.');
+	        titleField.focus();
+	        return;
+	    }
+
+	    if (!contentField.value.trim()) {
+	        e.preventDefault();
+	        alert('내용을 비워둘 수 없어요.');
+	        contentField.focus();
+	        return;
+	    }
+	});
 });

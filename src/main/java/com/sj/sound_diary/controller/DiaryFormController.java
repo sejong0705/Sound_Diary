@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,9 +29,16 @@ public class DiaryFormController {
 
     //작성 후 등록하기 버튼을 눌렀을 때
     @PostMapping("/diary/write")
-    public String submitDiary(@ModelAttribute DiaryDto diaryDto, HttpSession session) {
+    public String submitDiary(@ModelAttribute DiaryDto diaryDto, HttpSession session,
+                              RedirectAttributes redirectAttributes) {
         Long memberId = SessionUtils.attr(session, "memberId");
-        diaryService.createDiary(diaryDto, memberId);
+        try {
+            diaryService.createDiary(diaryDto, memberId);
+        } catch (IllegalArgumentException e) {
+            // 제목/내용 누락 등 검증 실패 → 500 대신 작성 화면으로 돌려보내고 메시지 표시
+            redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
+            return "redirect:/diary/write";
+        }
         return "redirect:/diary/list";
     }
     
@@ -58,11 +66,17 @@ public class DiaryFormController {
 
     // 수정 저장
     @PostMapping("/diary/detail/{id}")
-    public String updateDiary(@PathVariable("id") Long id, @ModelAttribute DiaryDto diaryDto, HttpSession session) {
+    public String updateDiary(@PathVariable("id") Long id, @ModelAttribute DiaryDto diaryDto, HttpSession session,
+                              RedirectAttributes redirectAttributes) {
         Long memberId = SessionUtils.attr(session, "memberId");
-        if (!diaryService.updateDiary(id, diaryDto, memberId)) {
-            // 존재하지 않거나 본인 글이 아닌 경우
-            return "redirect:/diary/list";
+        try {
+            if (!diaryService.updateDiary(id, diaryDto, memberId)) {
+                // 존재하지 않거나 본인 글이 아닌 경우
+                return "redirect:/diary/list";
+            }
+        } catch (IllegalArgumentException e) {
+            // 검증 실패 → 상세 화면으로 돌려보내고 메시지 표시
+            redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());
         }
         return "redirect:/diary/detail/" + id;
     }

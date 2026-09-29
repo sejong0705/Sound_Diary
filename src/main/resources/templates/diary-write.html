@@ -30,7 +30,7 @@
 
 			<!-- 우측: 기존 일기 작성 폼 -->
 			<div class="col-lg-6">
-				<form class="sd-card" method="post">
+				<form class="sd-card" method="post" id="writeForm">
 
 					<input type="hidden" name="latitude" id="latitudeField"> <input
 						type="hidden" name="longitude" id="longitudeField"> <input
@@ -47,6 +47,10 @@
 						id="spotifyTrackUriField">
 
 					<h2 class="sd-title">오늘의 기록</h2>
+
+					<!-- 서버 검증 실패 시 메시지 -->
+					<div class="sd-status error mb-3" th:if="${errorMsg}"
+						th:text="${errorMsg}"></div>
 
 					<!-- 선택된 곡 미리보기 -->
 					<div class="sd-selected-track mb-3 d-none"
@@ -88,7 +92,7 @@
 					<div class="mb-3">
 						<label class="form-label sd-label">일기 제목</label> <input
 							type="text" name="title" class="form-control sd-input"
-							maxlength="20" placeholder="오늘의 감정을 담은 제목을 적어주세요. (최대 20자)">
+							maxlength="20" required placeholder="오늘의 감정을 담은 제목을 적어주세요. (최대 20자)">
 					</div>
 					<div class="mb-3">
 						<label class="form-label sd-label">감성 및 일기</label>
